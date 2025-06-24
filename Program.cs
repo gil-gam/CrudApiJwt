@@ -1,5 +1,6 @@
 using CrudApiJwt.Data;
 using CrudApiJwt.Services;
+using CrudApiJwt.Services.Interfaces;
 using CrudApiJwt.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -64,6 +65,10 @@ builder.Services.AddSwaggerGen(c =>
         { jwtSecurityScheme, Array.Empty<string>() }
     });
 });
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IContactService, ContactService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

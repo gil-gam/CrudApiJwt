@@ -1,54 +1,36 @@
-﻿using CrudApiJwt.Data;
-using CrudApiJwt.DTOs;
-using CrudApiJwt.Models;
-using CrudApiJwt.Services;
+﻿using CrudApiJwt.Services.Interfaces;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace CrudApiJwt.Controllers
+[ApiController]
+[Route("api/[controller]")]
+public class AuthController : ControllerBase
 {
-    [ApiController]
-    [Route("api/auth")]
-    public class AuthController : ControllerBase
+    private readonly IAuthService _authService;
+
+    public AuthController(IAuthService authService)
     {
-        private readonly AppDbContext _context;
-        private readonly TokenService _tokenService;
+        _authService = authService;
+    }
 
-        public AuthController(AppDbContext context, TokenService tokenService)
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    {
+        try
         {
-            _context = context;
-            _tokenService = tokenService;
-        }
-
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(LoginDTO model)
-        {
-            if (_context.Users.Any(u => u.Email == model.Email))
-                return BadRequest("E-mail já registrado.");
-
-            var user = new User
-            {
-                Email = model.Email,
-                Name = model.Email.Split('@')[0],
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password)
-            };
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "Usuário registrado com sucesso." });
-        }
-
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDTO model)
-        {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
-                return Unauthorized("Credenciais inválidas.");
-
-            var token = _tokenService.GenerateToken(user);
+            var token = await _authService.LoginAsync(request);
             return Ok(new { token });
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
         }
     }
 
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+    {
+        var user = await _authService.RegisterAsync(request);
+        return Ok(user);
+    }
 }

@@ -1,33 +1,30 @@
-﻿using CrudApiJwt.Data;
-using CrudApiJwt.DTOs;
-using CrudApiJwt.Models;
+﻿using CrudApiJwt.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
-namespace CrudApiJwt.Controllers
+[Authorize]
+[ApiController]
+[Route("api/[controller]")]
+public class UserController : ControllerBase
 {
-    [ApiController]
-    [Route("api/users")]
-    [Authorize]
-    public class UserController : ControllerBase
+    private readonly IUserService _userService;
+
+    public UserController(IUserService userService)
     {
-        private readonly AppDbContext _context;
-
-        public UserController(AppDbContext context)
-        {
-            _context = context;
-        }
-
-        [HttpGet("me")]
-        public async Task<IActionResult> GetCurrentUser()
-        {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var user = await _context.Users.FindAsync(userId);
-            if (user == null) return NotFound();
-
-            return Ok(new UserDTO { Name = user.Name, Email = user.Email });
-        }
+        _userService = userService;
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var users = await _userService.GetAllAsync();
+        return Ok(users);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get(int id)
+    {
+        var user = await _userService.GetByIdAsync(id);
+        return Ok(user);
+    }
 }
