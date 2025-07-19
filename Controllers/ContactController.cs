@@ -1,4 +1,10 @@
-﻿[Authorize]
+﻿using CrudApiJwt.DTOs;
+using CrudApiJwt.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class ContactController : ControllerBase
@@ -29,7 +35,7 @@ public class ContactController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] ContactCreateDto dto)
+    public async Task<IActionResult> Create([FromBody] ContactDTO dto)
     {
         var userId = GetUserId();
         var contact = await _contactService.CreateAsync(dto, userId);
@@ -37,7 +43,7 @@ public class ContactController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] ContactCreateDto dto)
+    public async Task<IActionResult> Update(int id, [FromBody] ContactDTO dto)
     {
         var userId = GetUserId();
         var contact = await _contactService.UpdateAsync(id, dto, userId);

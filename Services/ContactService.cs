@@ -26,7 +26,7 @@ namespace CrudApiJwt.Services
             return contact ?? throw new Exception("Contato não encontrado");
         }
 
-        public async Task<Contact> CreateAsync(ContactCreateDto dto, int userId)
+        public async Task<Contact> CreateAsync(ContactDTO dto, int userId)
         {
             var contact = new Contact
             {
@@ -40,7 +40,7 @@ namespace CrudApiJwt.Services
             return contact;
         }
 
-        public async Task<Contact> UpdateAsync(int id, ContactCreateDto dto, int userId)
+        public async Task<Contact> UpdateAsync(int id, ContactDTO dto, int userId)
         {
             var contact = await _context.Contacts.FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId);
             if (contact == null) throw new Exception("Contato não encontrado");

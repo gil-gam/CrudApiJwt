@@ -24,8 +24,8 @@ namespace CrudApiJwt.Services
 
         public async Task<string> LoginAsync(LoginRequest request)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
-            if (user == null || user.Password != request.Password)
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
+            if (user == null || user.PasswordHash != request.Password)
                 throw new UnauthorizedAccessException("Credenciais inválidas");
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -35,7 +35,7 @@ namespace CrudApiJwt.Services
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Name, user.Username)
+                    new Claim(ClaimTypes.Name, user.Email)
                 }),
                 Expires = DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
@@ -49,14 +49,14 @@ namespace CrudApiJwt.Services
 
         public async Task<User> RegisterAsync(RegisterRequest request)
         {
-            var exists = await _context.Users.AnyAsync(u => u.Username == request.Username);
+            var exists = await _context.Users.AnyAsync(u => u.Email == request.Email);
             if (exists)
                 throw new Exception("Usuário já existe");
 
             var user = new User
             {
-                Username = request.Username,
-                Password = request.Password // em projeto real: criptografar
+                Email = request.Email,
+                PasswordHash = request.Password // em projeto real: criptografar
             };
 
             _context.Users.Add(user);

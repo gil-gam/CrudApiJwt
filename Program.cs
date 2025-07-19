@@ -20,6 +20,10 @@ var jwtSettings = jwtSection.Get<JwtSettings>();
 builder.Services.AddSingleton(jwtSettings);
 builder.Services.AddScoped<TokenService>();
 
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

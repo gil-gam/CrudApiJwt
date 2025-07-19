@@ -7,8 +7,8 @@ namespace CrudApiJwt.Services.Interfaces
     {
         Task<List<Contact>> GetAllAsync(int userId);
         Task<Contact> GetByIdAsync(int id, int userId);
-        Task<Contact> CreateAsync(ContactCreateDto dto, int userId);
-        Task<Contact> UpdateAsync(int id, ContactCreateDto dto, int userId);
+        Task<Contact> CreateAsync(ContactDTO dto, int userId);
+        Task<Contact> UpdateAsync(int id, ContactDTO dto, int userId);
         Task<bool> DeleteAsync(int id, int userId);
     }
 }
