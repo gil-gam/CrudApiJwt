@@ -1,12 +1,11 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using CrudApiJwt.DTOs;
 using CrudApiJwt.Models;
 using CrudApiJwt.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CrudApiJwt.Services
@@ -15,6 +14,8 @@ namespace CrudApiJwt.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
+        private readonly PasswordHasher<User> _passwordHasher = new();
+
 
         public AuthService(ApplicationDbContext context, IConfiguration configuration)
         {
@@ -25,7 +26,8 @@ namespace CrudApiJwt.Services
         public async Task<string> LoginAsync(LoginRequest request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
-            if (user == null || user.PasswordHash != request.Password)
+            if (user == null ||
+                _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password) != PasswordVerificationResult.Success)
                 throw new UnauthorizedAccessException("Credenciais inválidas");
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -56,7 +58,7 @@ namespace CrudApiJwt.Services
             var user = new User
             {
                 Email = request.Email,
-                PasswordHash = request.Password // em projeto real: criptografar
+                PasswordHash = _passwordHasher.HashPassword(new User(), request.Password) // Passando uma instância de User
             };
 
             _context.Users.Add(user);
