@@ -57,11 +57,13 @@ namespace CrudApiJwt.Services
 
             var user = new User
             {
+                Name = string.Empty,
                 Email = request.Email,
-                PasswordHash = _passwordHasher.HashPassword(new User(), request.Password) // Passando uma instância de User
+                PasswordHash = _passwordHasher.HashPassword(new User(), request.Password)
             };
 
             _context.Users.Add(user);
+
             await _context.SaveChangesAsync();
 
             return user;
