@@ -4,7 +4,6 @@ API RESTful desenvolvida com ASP.NET Core 8, Entity Framework Core e autenticaç
 
 🚧 Em construção
 
-
 ---
 
 ## 🚀 Funcionalidades
@@ -18,7 +17,6 @@ API RESTful desenvolvida com ASP.NET Core 8, Entity Framework Core e autenticaç
 - 🧪 Testes unitários para Services, Validators e Middleware
 - 🗃️ Banco de dados com EF Core e Migrations
 
-
 ---
 
 ## 🧱 Stack Tecnológico
@@ -30,7 +28,6 @@ API RESTful desenvolvida com ASP.NET Core 8, Entity Framework Core e autenticaç
 - ✅ FluentValidation
 - ✅ Swagger (Swashbuckle)
 - ✅ xUnit + Moq (para testes)
-
 
 ---
 
@@ -84,6 +81,7 @@ dotnet run
 ```bash
 https://localhost:7035/swagger
 ```
+
 ---
 
 ## 🔐 Como testar a autenticação JWT (via Swagger)
@@ -103,14 +101,28 @@ Bearer SEU_TOKEN_AQUI
 5. Agora você poderá acessar as rotas protegidas (ex: /api/contacts)
 
 ---
+
 ## 🧪 Testes Automatizados
+
 ✅ Serviços: AuthService, UserService, ContactService
 
 ✅ Validadores: FluentValidation com cobertura completa
 
 ✅ Middleware: ExceptionHandlingMiddleware
 
-⏳ Testes de integração serão implementados após os Controllers
+✅ Controllers: AuthController, UsersController, ContactController
+
+⏳ Testes de integração serão implementados após finalização de todas as rotas
+
+### Como executar os testes
+
+Execute o seguinte comando no terminal:
+
+```bash
+dotnet test
+```
+
+Os testes utilizam xUnit + Moq e garantem que os principais fluxos da aplicação estão funcionando corretamente.
 
 ---
 
@@ -175,10 +187,3 @@ Este projeto está sob a licença MIT. Sinta-se livre para utilizar, modificar e
 ---
 
 OBS.: futuramente, incluir imagens/prints para destacar a interface do Swagger ou os testes de token.
-
-
-
-
-
-
-
