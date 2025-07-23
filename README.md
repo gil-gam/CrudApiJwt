@@ -2,29 +2,35 @@
 
 API RESTful desenvolvida com ASP.NET Core 8, Entity Framework Core e autenticação via JWT. Permite gerenciamento de usuários e seus contatos pessoais, com proteção de rotas e autenticação baseada em tokens.
 
+🚧 Em construção
+
+
 ---
 
 ## 🚀 Funcionalidades
 
-- 🔐 Cadastro e login de usuários com autenticação JWT
+- 🔐 Cadastro e login com autenticação JWT
 - 👤 CRUD completo de usuários
-- 📇 CRUD completo de contatos (1 usuário → N contatos)
-- 🔑 Proteção de rotas com autorização JWT
-- 📄 Documentação automática com Swagger
-- 🧪 Pronto para testes via Swagger UI ou Postman
-- 🗃️ Banco de dados com Entity Framework Core + Migrations
+- 📇 CRUD completo de contatos (relação 1:N)
+- 🛡️ Proteção de rotas com autorização baseada em JWT
+- ✅ Validações com FluentValidation
+- 📄 Documentação interativa com Swagger
+- 🧪 Testes unitários para Services, Validators e Middleware
+- 🗃️ Banco de dados com EF Core e Migrations
+
 
 ---
 
-## 🧱 Tecnologias e Stack
+## 🧱 Stack Tecnológico
 
-- ASP.NET Core 8
-- Entity Framework Core 8
-- SQL Server (ou SQLite, configurável)
-- JWT (JSON Web Token) para autenticação
-- Swagger (Swashbuckle) para documentação
-- AutoMapper (opcional para mapeamento DTOs)
-- FluentValidation (opcional para validações)
+- ✅ ASP.NET Core 8
+- ✅ Entity Framework Core 8
+- ✅ SQL Server (ou SQLite)
+- ✅ JWT (JSON Web Token)
+- ✅ FluentValidation
+- ✅ Swagger (Swashbuckle)
+- ✅ xUnit + Moq (para testes)
+
 
 ---
 
@@ -61,30 +67,30 @@ cd CrudApiJwt
 }
 ```
 
-5. Execute as migrações (via terminal ou Package Manager Console):
+5. Execute as migrações para criar o banco:
 
 ```bash
 dotnet ef database update
 ```
 
-6. Rode o projeto:
+6. Execute a aplicação:
 
 ```bash
 dotnet run
 ```
 
-7. Acesse a API via Swagger:
+7. Acesse a interface do Swagger:
 
 ```bash
-https://localhost:5001/swagger
+https://localhost:7035/swagger
 ```
 ---
 
-## 🧪 Autenticação JWT (como testar)
+## 🔐 Como testar a autenticação JWT (via Swagger)
 
-1. Faça um POST em /api/auth/register para cadastrar um novo usuário
+1. Faça um POST em /api/auth/register com email e senha
 
-2. Faça login com POST em /api/auth/login
+2. Em seguida, faça login com POST em /api/auth/login
 
 3. Copie o token retornado
 
@@ -97,33 +103,57 @@ Bearer SEU_TOKEN_AQUI
 5. Agora você poderá acessar as rotas protegidas (ex: /api/contacts)
 
 ---
+## 🧪 Testes Automatizados
+✅ Serviços: AuthService, UserService, ContactService
+
+✅ Validadores: FluentValidation com cobertura completa
+
+✅ Middleware: ExceptionHandlingMiddleware
+
+⏳ Testes de integração serão implementados após os Controllers
+
+---
 
 ## 🗂️ Estrutura do Projeto 
 
 ```bash
 ├── Controllers
-│   ├── AuthController.cs
-│   ├── UsersController.cs
+│   └── AuthController.cs
+│   └── UsersController.cs
 │   └── ContactsController.cs
-│
-├── Models
-│   ├── User.cs
-│   └── Contact.cs
-│
-├── DTOs
-│   ├── UserDTO.cs
-│   ├── ContactDTO.cs
-│   └── LoginDTO.cs
 │
 ├── Data
 │   └── AppDbContext.cs
 │
+├── DTOs
+│   └── UserDTO.cs
+│   └── ContactDTO.cs
+│   └── LoginDTO.cs
+│
+├── Middlewares
+│   └── ExceptionHandlingMiddleware.cs
+|
+├── Migrations
+|
+├── Models
+│   └── User.cs
+│   └── Contact.cs
+|
 ├── Services
+│   └── ApplicationDbContext.cs
+│   └── AuthService.cs
+│   └── ContactService.cs
 │   └── TokenService.cs
+│   └── UserService.cs
 │
 ├── Settings
 │   └── JwtSettings.cs
 │
+├── Validators
+│   └── UserDTOValidator.cs
+│   └── ContactDTOValidator.cs
+│   └── LoginDTOValidator.cs
+|
 ├── Program.cs
 ├── appsettings.json
 └── README.md
@@ -144,7 +174,7 @@ Este projeto está sob a licença MIT. Sinta-se livre para utilizar, modificar e
 
 ---
 
-OBS.: incluir imagens/prints para destacar a interface do Swagger ou os testes de token.
+OBS.: futuramente, incluir imagens/prints para destacar a interface do Swagger ou os testes de token.
 
 
 
