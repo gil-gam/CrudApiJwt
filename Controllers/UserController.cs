@@ -20,6 +20,8 @@ public class UsersController : ControllerBase
     /// Lista todos os usuários.
     /// </summary>
     /// <returns>Lista de usuários.</returns>
+    /// [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<User>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<User>>> GetAll()

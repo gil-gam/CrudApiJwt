@@ -1,9 +1,11 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using CrudApiJwt.Models;
+using CrudApiJwt.Settings;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using CrudApiJwt.Models;
-using CrudApiJwt.Settings;
-using Microsoft.IdentityModel.Tokens;
 
 namespace CrudApiJwt.Services
 {
@@ -11,9 +13,9 @@ namespace CrudApiJwt.Services
     {
         private readonly JwtSettings _jwtSettings;
 
-        public TokenService(JwtSettings jwtSettings)
+        public TokenService(IOptions<JwtSettings> jwtOptions)
         {
-            _jwtSettings = jwtSettings;
+            _jwtSettings = jwtOptions.Value;
         }
 
         public string GenerateToken(User user)

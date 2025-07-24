@@ -4,7 +4,6 @@ API RESTful desenvolvida com ASP.NET Core 8, Entity Framework Core e autenticaç
 
 🚧 Em construção
 
-
 ---
 
 ## 🚀 Funcionalidades
@@ -12,12 +11,11 @@ API RESTful desenvolvida com ASP.NET Core 8, Entity Framework Core e autenticaç
 - 🔐 Cadastro e login com autenticação JWT
 - 👤 CRUD completo de usuários
 - 📇 CRUD completo de contatos (relação 1:N)
-- 🛡️ Proteção de rotas com autorização baseada em JWT
+- 🛡️ Proteção de rotas com autorização baseada em JWT e Claims
 - ✅ Validações com FluentValidation
 - 📄 Documentação interativa com Swagger
-- 🧪 Testes unitários para Services, Validators e Middleware
+- 🧪 Testes unitários para Services, Validators, Controllers e Middleware
 - 🗃️ Banco de dados com EF Core e Migrations
-
 
 ---
 
@@ -30,7 +28,6 @@ API RESTful desenvolvida com ASP.NET Core 8, Entity Framework Core e autenticaç
 - ✅ FluentValidation
 - ✅ Swagger (Swashbuckle)
 - ✅ xUnit + Moq (para testes)
-
 
 ---
 
@@ -50,7 +47,7 @@ cd CrudApiJwt
 
 3. Configure a string de conexão no arquivo appsettings.json:
 
-```bash
+```json
 "ConnectionStrings": {
   "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=Db;Trusted_Connection=True;"
 }
@@ -58,16 +55,18 @@ cd CrudApiJwt
 
 4. Configure a chave JWT no appsettings.json:
 
-```bash
+```json
 "JwtSettings": {
-  "SecretKey": "sua-chave-super-secreta",
+  "SecretKey": "sua-chave-super-secreta-256bits-exemplo",
   "Issuer": "CrudApiJwt",
   "Audience": "CrudApiJwtUsers",
   "ExpirationInMinutes": 60
 }
 ```
 
-5. Execute as migrações para criar o banco:
+🛑 Importante: o SecretKey deve ter pelo menos 256 bits (32 caracteres em UTF-8) para o algoritmo HS256 funcionar corretamente.
+
+5. Execute as migrações:
 
 ```bash
 dotnet ef database update
@@ -79,42 +78,78 @@ dotnet ef database update
 dotnet run
 ```
 
-7. Acesse a interface do Swagger:
+7. Acesse o Swagger UI:
 
 ```bash
 https://localhost:7035/swagger
 ```
+
 ---
 
 ## 🔐 Como testar a autenticação JWT (via Swagger)
 
-1. Faça um POST em /api/auth/register com email e senha
+1. Faça um POST em /api/auth/register com email e senha válidos
 
 2. Em seguida, faça login com POST em /api/auth/login
 
-3. Copie o token retornado
+3. Copie o token JWT gerado
 
-4. No Swagger UI, clique em “Authorize” e insira:
+4. Clique em “Authorize” no Swagger UI e insira:
 
 ```bash
 Bearer SEU_TOKEN_AQUI
 ```
 
-5. Agora você poderá acessar as rotas protegidas (ex: /api/contacts)
+5. Agora você poderá acessar rotas protegidas como /api/users ou /api/contacts
 
 ---
+
+## 🔐 Estrutura do Token JWT
+
+O token gerado inclui Claims (informações embutidas no token) como:
+
+- sub: ID do usuário
+- email: Email do usuário
+- jti: Identificador único do token
+- nameidentifier: ID do usuário
+- name: Nome do usuário
+- email: Email do usuário (repetido como claim padrão)
+- role: Papel do usuário (ex: "User", "Admin")
+
+Essas claims são usadas para validar o contexto da requisição nas rotas protegidas, habilitando cenários de autorização baseados em roles e identidade.
+
+Exemplo de payload decodificado:
+
+```json
+{
+  "sub": "1",
+  "email": "admin@admin.com",
+  "jti": "some-guid",
+  "nameidentifier": "1",
+  "name": "Admin",
+  "role": "User"
+}
+```
+
+---
+
 ## 🧪 Testes Automatizados
-✅ Serviços: AuthService, UserService, ContactService
 
-✅ Validadores: FluentValidation com cobertura completa
+✅ Serviços: AuthService, UserService, ContactService  
+✅ Validadores: FluentValidation com cobertura completa  
+✅ Middleware: ExceptionHandlingMiddleware  
+✅ Controllers: AuthController, UsersController, ContactController  
+⏳ Testes de integração serão implementados após finalização de todas as rotas
 
-✅ Middleware: ExceptionHandlingMiddleware
+📦 Execute os testes com:
 
-⏳ Testes de integração serão implementados após os Controllers
+```bash
+dotnet test
+```
 
 ---
 
-## 🗂️ Estrutura do Projeto 
+## 🗂️ Estrutura do Projeto
 
 ```bash
 ├── Controllers
@@ -132,13 +167,13 @@ Bearer SEU_TOKEN_AQUI
 │
 ├── Middlewares
 │   └── ExceptionHandlingMiddleware.cs
-|
+│
 ├── Migrations
-|
+│
 ├── Models
 │   └── User.cs
 │   └── Contact.cs
-|
+│
 ├── Services
 │   └── ApplicationDbContext.cs
 │   └── AuthService.cs
@@ -153,7 +188,7 @@ Bearer SEU_TOKEN_AQUI
 │   └── UserDTOValidator.cs
 │   └── ContactDTOValidator.cs
 │   └── LoginDTOValidator.cs
-|
+│
 ├── Program.cs
 ├── appsettings.json
 └── README.md
@@ -163,22 +198,15 @@ Bearer SEU_TOKEN_AQUI
 
 ## 👨‍💻 Autor
 
-Desenvolvido por Gilberto Andreatta Maia
-
+Desenvolvido por Gilberto Andreatta Maia  
 https://www.linkedin.com/in/gilbertoandreatta/
 
 ---
 
 ## 📝 Licença
+
 Este projeto está sob a licença MIT. Sinta-se livre para utilizar, modificar e distribuir.
 
 ---
 
-OBS.: futuramente, incluir imagens/prints para destacar a interface do Swagger ou os testes de token.
-
-
-
-
-
-
-
+✅ Futuro: incluir prints e imagens do Swagger e exemplos visuais de uso do token JWT para facilitar testes e compreensão.
