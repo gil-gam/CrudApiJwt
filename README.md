@@ -134,6 +134,7 @@ Exemplo de payload decodificado:
 ---
 
 ## 🧪 Testes Automatizados
+✅ Serviços: AuthService, UserService, ContactService
 
 ✅ Serviços: AuthService, UserService, ContactService  
 ✅ Validadores: FluentValidation com cobertura completa  
@@ -141,11 +142,9 @@ Exemplo de payload decodificado:
 ✅ Controllers: AuthController, UsersController, ContactController  
 ⏳ Testes de integração serão implementados após finalização de todas as rotas
 
-📦 Execute os testes com:
+⏳ Testes de integração serão implementados após os Controllers
 
-```bash
-dotnet test
-```
+Os testes utilizam xUnit + Moq e garantem que os principais fluxos da aplicação estão funcionando corretamente.
 
 ---
 
@@ -209,4 +208,11 @@ Este projeto está sob a licença MIT. Sinta-se livre para utilizar, modificar e
 
 ---
 
-✅ Futuro: incluir prints e imagens do Swagger e exemplos visuais de uso do token JWT para facilitar testes e compreensão.
+OBS.: futuramente, incluir imagens/prints para destacar a interface do Swagger ou os testes de token.
+
+
+
+
+
+
+
