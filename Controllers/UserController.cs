@@ -7,7 +7,7 @@ namespace CrudApiJwt.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+[Authorize(Policy = "AdminOnly")] // Política aplicada globalmente ao controller
 public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -17,11 +17,8 @@ public class UsersController : ControllerBase
     }
 
     /// <summary>
-    /// Lista todos os usuários.
+    /// Lista todos os usuários (somente administradores).
     /// </summary>
-    /// <returns>Lista de usuários.</returns>
-    /// [Authorize(Roles = "Admin")]
-    [Authorize(Roles = "Admin")]
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<User>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<User>>> GetAll()
@@ -33,8 +30,6 @@ public class UsersController : ControllerBase
     /// <summary>
     /// Retorna um usuário pelo ID.
     /// </summary>
-    /// <param name="id">ID do usuário.</param>
-    /// <returns>Usuário encontrado ou 404.</returns>
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

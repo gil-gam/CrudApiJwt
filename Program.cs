@@ -9,20 +9,21 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Configuração de banco de dados
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // 2. Configuração de JWT
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>()
-    ?? throw new InvalidOperationException("JwtSettings section is missing or invalid.");
+?? throw new InvalidOperationException("JwtSettings section is missing or invalid.");
 
 builder.Services.AddSingleton(jwtSettings);
 builder.Services.AddScoped<TokenService>();
@@ -48,6 +49,13 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// 2.1. Políticas baseadas em Claims
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+    policy.RequireClaim(ClaimTypes.Role, "Admin"));
+});
+
 // 3. Injeção de dependências
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -56,7 +64,7 @@ builder.Services.AddScoped<IContactService, ContactService>();
 // 4. MVC + FluentValidation
 builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation()
-                .AddFluentValidationClientsideAdapters();
+.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 // 5. Swagger com suporte a autenticação JWT
@@ -64,7 +72,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "API CRUD JWT", Version = "v1" });
-
     var jwtSecurityScheme = new OpenApiSecurityScheme
     {
         BearerFormat = "JWT",
@@ -82,9 +89,9 @@ builder.Services.AddSwaggerGen(c =>
 
     c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        { jwtSecurityScheme, Array.Empty<string>() }
-    });
+{
+    { jwtSecurityScheme, Array.Empty<string>() }
+});
 });
 
 // 6. Pipeline de execução
@@ -98,5 +105,7 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();
+
+await DataSeeder.SeedAdminUserAsync(app.Services);
 
 app.Run();
