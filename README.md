@@ -36,24 +36,25 @@ API RESTful desenvolvida com ASP.NET Core 8, Entity Framework Core e autenticaç
 
 ```bash
 git clone https://github.com/seu-usuario/CrudApiJwt.git
-
+```
 
 2. Acesse o diretório:
 
-bash
+```bash
 cd CrudApiJwt
-
+```
 
 3. Configure a string de conexão no arquivo appsettings.json:
 
+```bash
 json
 "ConnectionStrings": {
   "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=Db;Trusted_Connection=True;"
 }
-
+```
 
 4. Configure a chave JWT no appsettings.json:
-
+```bash
 json
 "JwtSettings": {
   "SecretKey": "sua-chave-super-secreta-256bits-exemplo",
@@ -61,27 +62,27 @@ json
   "Audience": "CrudApiJwtUsers",
   "ExpirationInMinutes": 60
 }
-
+```
 
 🛑 Importante: o SecretKey deve ter pelo menos 256 bits (32 caracteres em UTF-8) para o algoritmo HS256 funcionar corretamente.
 
 5. Execute as migrações:
 
-bash
+```bash
 dotnet ef database update
-
+```
 
 6. Execute a aplicação:
 
-bash
+```bash
 dotnet run
-
+```
 
 7. Acesse o Swagger UI:
 
-bash
+```bash
 https://localhost:7035/swagger
-
+```
 
 ---
 
@@ -95,9 +96,9 @@ https://localhost:7035/swagger
 
 4. Clique em “Authorize” no Swagger UI e insira:
 
-bash
+```bash
 Bearer SEU_TOKEN_AQUI
-
+```
 
 5. Agora você poderá acessar rotas protegidas como /api/users ou /api/contacts
 
@@ -118,7 +119,7 @@ O token gerado inclui Claims (informações embutidas no token) como:
 Essas claims são usadas para validar o contexto da requisição nas rotas protegidas, habilitando cenários de autorização baseados em roles e identidade.
 
 Exemplo de payload decodificado:
-
+```bash
 json
 {
   "sub": "1",
@@ -128,7 +129,7 @@ json
   "name": "Admin",
   "role": "User"
 }
-
+```
 
 ---
 
@@ -141,15 +142,15 @@ json
 
 📦 Execute os testes com:
 
-bash
+```bash
 dotnet test
-
+```
 
 ---
 
 ## 🗂️ Estrutura do Projeto
 
-bash
+```bash
 ├── Controllers
 │   └── AuthController.cs
 │   └── UsersController.cs
@@ -190,7 +191,7 @@ bash
 ├── Program.cs
 ├── appsettings.json
 └── README.md
-
+```
 
 ---
 
