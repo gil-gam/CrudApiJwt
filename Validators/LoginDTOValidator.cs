@@ -1,6 +1,5 @@
-﻿using FluentValidation;
-using CrudApiJwt.DTOs;
-using Azure.Core;
+﻿using CrudApiJwt.DTOs;
+using FluentValidation;
 
 namespace CrudApiJwt.Validators
 {

@@ -1,5 +1,4 @@
-﻿using CrudApiJwt.Data;
-using CrudApiJwt.Models;
+﻿using CrudApiJwt.Models;
 using CrudApiJwt.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 

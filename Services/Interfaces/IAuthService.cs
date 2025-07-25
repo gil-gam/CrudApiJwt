@@ -1,5 +1,4 @@
-﻿using CrudApiJwt.DTOs;
-using CrudApiJwt.Models;
+﻿using CrudApiJwt.Models;
 using Microsoft.AspNetCore.Identity.Data;
 
 namespace CrudApiJwt.Services.Interfaces

@@ -1,5 +1,5 @@
-﻿using FluentValidation;
-using CrudApiJwt.DTOs;
+﻿using CrudApiJwt.DTOs;
+using FluentValidation;
 
 namespace CrudApiJwt.Validators
 {
