@@ -1,4 +1,6 @@
 # 📦 CrudApiJwt
+![version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+
 
 API RESTful desenvolvida com ASP.NET Core 8, Entity Framework Core e autenticação via JWT. Permite gerenciamento de usuários e seus contatos pessoais, com proteção de rotas e autenticação baseada em tokens.
 
